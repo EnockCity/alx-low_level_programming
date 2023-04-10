@@ -35,11 +35,11 @@ return (buffer);
 
 void close_file(int p)
 {
-int m;
+int c;
 
-m = close(p);
+c = close(p);
 
-if (m == -1)
+if (c == -1)
 {
 dprintf(STDERR_FILENO, "Error: Can't close p %d\n", p);
 exit(100);
