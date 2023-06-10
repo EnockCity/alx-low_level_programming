@@ -1,0 +1,27 @@
+#include "main.h"
+#include <stdio.h>
+
+/**
+  *_strcat - function that concatinates two strings
+  *@dest: parameter to be checked
+  *@src: source strings to be checked
+  *Return: 0
+  */
+
+char *_strcat(char *dest, char *src)
+{
+	int dest_length = 0;
+	int name = 0;
+
+	while (dest[dest_length] != '\0')
+	{
+		++dest_length;
+	}
+	while (src[name] != '\0')
+	{
+		dest[dest_length + name] = src[name];
+		++name;
+	}
+	dest[dest_length + name] = '\0';
+	return (dest);
+}
