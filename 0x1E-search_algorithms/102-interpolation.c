@@ -1,7 +1,7 @@
 #include "search_algos.h"
 
 /**
-* interpolation_search -	function that searches for a value in
+* interpolation_search - function that searches for a value in
 * an array of integers using the interpolation search algorithm
 * @array: array of integers
 * @size: size of array
@@ -11,16 +11,20 @@
 int interpolation_search(int *array, size_t size, int value)
 {
 	size_t low, mid, high;
+	double fraction;
 
 	low = 0;
-	high = (int) size - 1;
+	high = size - 1;
 
 	if (!array || size == 0)
 		return (-1);
-	while (array[low] != array[high] && value >= array[low] &&
-	       value <= array[high])
+
+	while ((array[low] != array[high]) &&
+	       (value >= array[low]) &&
+	       (value <= array[high]))
 	{
-		mid = low + (((double) (high - low) / (array[high] - array[low])) * (value - array[low]));
+		fraction = (double)(high - low) / (array[high] - array[low]);
+		mid = low + (fraction * (value - array[low]));
 
 		printf("Value checked array[%ld] = [%d]\n", mid, array[mid]);
 		if (value > array[mid])
@@ -30,7 +34,8 @@ int interpolation_search(int *array, size_t size, int value)
 		else
 			return (mid);
 	}
-	mid = low + (((double) (high - low) / (array[high] - array[low])) * (value - array[low]));
+	fraction = (double)(high - low) / (array[high] - array[low]);
+	mid = low + (fraction * (value - array[low]));
 	printf("Value checked array[%ld] is out of range\n", mid);
 	return (-1);
 }
