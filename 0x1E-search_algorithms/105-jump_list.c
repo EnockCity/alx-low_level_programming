@@ -2,49 +2,58 @@
 #include <math.h>
 
 /**
- * jump_list - searches for a value in an array of
- * integers using the Jump search algorithm
+ * jump_list - searches for a value in a sorted list of integers using
+ * the Jump search algorithm.
  *
- * @list: input list
- * @size: size of the array
- * @value: value to search in
- * Return: index of the number
+ * @list: pointer to the head of the list to search in
+ * @size: number of nodes in the list
+ * @value: value to search for
+ * Return: pointer to the first node where value is located, or NULL if value
+ * is not present or list is NULL
  */
 listint_t *jump_list(listint_t *list, size_t size, int value)
 {
-	size_t index, k, m;
-	listint_t *prev;
-
 	if (list == NULL || size == 0)
-		return (NULL);
-
-	m = (size_t)sqrt((double)size);
-	index = 0;
-	k = 0;
-
-	do {
-		prev = list;
-		k++;
-		index = k * m;
-
-		while (list->next && list->index < index)
-			list = list->next;
-
-		if (list->next == NULL && index != list->index)
-			index = list->index;
-
-		printf("Value checked at index [%d] = [%d]\n", (int)index, list->n);
-
-	} while (index < size && list->next && list->n < value);
-
-	printf("Value found between indexes ");
-	printf("[%d] and [%d]\n", (int)prev->index, (int)list->index);
-
-	for (; prev && prev->index <= list->index; prev = prev->next)
 	{
-		printf("Value checked at index [%d] = [%d]\n", (int)prev->index, prev->n);
+		return (NULL);
+	}
+
+	size_t step = (size_t)sqrt(size);
+	size_t prev_index = 0;
+	listint_t *prev = list;
+
+	/* Jumping forward in blocks of 'step' size */
+	while (prev->index < size && prev->n < value)
+	{
+		listint_t *current = prev;
+
+		/* Move to next block */
+		for (size_t i = 0; i < step && current->next; i++)
+		{
+			current = current->next;
+		}
+
+		printf("Value checked at index [%lu] = [%d]\n", current->index, current->n);
+
+		if (current->index == size || current->n >= value)
+		{
+			break;
+		}
+
+		prev = current;
+		prev_index = prev->index;
+	}
+
+	/* Linear search within the block */
+	printf("Value found between indexes [%lu] and [%lu]\n", prev_index, prev->index);
+	while (prev && prev->n <= value && prev->index < size)
+	{
+		printf("Value checked at index [%lu] = [%d]\n", prev->index, prev->n);
 		if (prev->n == value)
+		{
 			return (prev);
+		}
+		prev = prev->next;
 	}
 
 	return (NULL);
