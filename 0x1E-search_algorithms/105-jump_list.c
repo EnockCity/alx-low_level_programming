@@ -18,42 +18,36 @@ listint_t *jump_list(listint_t *list, size_t size, int value)
 		return (NULL);
 	}
 
-	size_t step = (size_t)sqrt(size);
-	size_t prev_index = 0;
+	size_t step = (size_t) sqrt(size);
+	size_t index = 0;
 	listint_t *prev = list;
+	listint_t *current = list;
 
 	/* Jumping forward in blocks of 'step' size */
-	while (prev->index < size && prev->n < value)
+	while (current->index < size && current->n < value)
 	{
-		listint_t *current = prev;
-
-		/* Move to next block */
+		prev = current;
 		for (size_t i = 0; i < step && current->next; i++)
 		{
 			current = current->next;
 		}
-
 		printf("Value checked at index [%lu] = [%d]\n", current->index, current->n);
 
-		if (current->index == size || current->n >= value)
+		if (current->n >= value || !current->next)
 		{
 			break;
 		}
-
-		prev = current;
-		prev_index = prev->index;
 	}
 
 	/* Linear search within the block */
-	printf("Value found between indexes [%lu] and [%lu]\n", prev_index, prev->index);
-	while (prev && prev->n <= value && prev->index < size)
+	printf("Value found between indexes [%lu] and [%lu]\n", prev->index, current->index);
+	for (listint_t *node = prev; node <= current && node->index < size; node = node->next)
 	{
-		printf("Value checked at index [%lu] = [%d]\n", prev->index, prev->n);
-		if (prev->n == value)
+		printf("Value checked at index [%lu] = [%d]\n", node->index, node->n);
+		if (node->n == value)
 		{
-			return (prev);
+			return (node);
 		}
-		prev = prev->next;
 	}
 
 	return (NULL);
